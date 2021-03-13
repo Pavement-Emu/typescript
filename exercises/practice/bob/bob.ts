@@ -1,20 +1,23 @@
+const silence = (message: string) => message === "";
+const containsCapitalLetters = (message: string) =>
+  message.toLowerCase() !== message;
+const allUppercase = (message: string) => message.toUpperCase() === message;
+const shouting = (message: string) =>
+  containsCapitalLetters(message) && allUppercase(message);
+const askingQuestion = (message: string) => message.endsWith("?");
+
 class Bob {
   hey(message: string) {
     message = message.trim();
-    const silence = message === "";
-    const containsCapitalLetters = message.toLowerCase() !== message;
-    const allUppercase = message.toUpperCase() === message;
-    const shouting = containsCapitalLetters && allUppercase;
-    const askingQuestion = message.endsWith("?");
-    if (shouting) {
-      if (askingQuestion) {
+    if (shouting(message)) {
+      if (askingQuestion(message)) {
         return "Calm down, I know what I'm doing!";
       } else {
         return "Whoa, chill out!";
       }
-    } else if (askingQuestion) {
+    } else if (askingQuestion(message)) {
       return "Sure.";
-    } else if (silence) {
+    } else if (silence(message)) {
       return "Fine. Be that way!";
     } else {
       return "Whatever.";
