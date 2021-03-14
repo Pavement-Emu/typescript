@@ -1,47 +1,62 @@
-// Mutates the passed in array - bad
-function shuffle<X>(array: X[]): X[] {
-  var shallowCopy = [...array];
-  for (var i = shallowCopy.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = shallowCopy[i];
-    shallowCopy[i] = shallowCopy[j];
-    shallowCopy[j] = temp;
-  }
-  return shallowCopy;
+function random(max: number) {
+  return Math.floor(Math.random() * max);
 }
 
 class NamePool {
+  private canonicalPool: string[] = [];
+
   private availableNames: string[] = [];
 
   constructor() {
     this.init();
   }
 
+  /**
+   * Assign a new name.
+   * Position chosen at random (lazily)
+   */
   assign(): string {
-    // assign names from the front
-    const name = this.availableNames.shift();
+    const totalNames = this.availableNames.length;
+    const nextName = random(totalNames);
+    const name = this.availableNames[nextName];
+    this.availableNames[nextName] = this.availableNames[totalNames - 1];
+    this.availableNames.pop();
+
     if (!name) {
       throw new Error("No names left");
     }
     return name;
   }
 
+  /**
+   * Creates a canonical pool of names
+   * and assigns the initial pool available.
+   * Performance optimisation (6x) so generation
+   * of serial numbers (and expensive operation)
+   * is only performed once.
+   */
   init() {
-    this.availableNames = [];
-    for (var x1: number = "A".charCodeAt(0); x1 <= "Z".charCodeAt(0); x1++) {
-      for (var x2: number = "A".charCodeAt(0); x2 <= "Z".charCodeAt(0); x2++) {
+    this.canonicalPool = [];
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for (const x1 of alphabet) {
+      for (const x2 of alphabet) {
         for (var n: number = 0; n <= 999; n++) {
-          const paddedNumber = `${n}`.padStart(3, "0");
-          const serial = `${String.fromCharCode(x1)}${String.fromCharCode(
-            x2
-          )}${paddedNumber}`;
-          this.availableNames.push(serial);
+          const paddedNumber = n.toString().padStart(3, "0");
+          const serial = `${x1}${x2}${paddedNumber}`;
+          this.canonicalPool.push(serial);
         }
       }
     }
 
+    this.reset();
+  }
+
+  /**
+   * resets the available pool of names.
+   */
+  reset() {
     // randomise
-    this.availableNames = shuffle(this.availableNames);
+    this.availableNames = [...this.canonicalPool];
   }
 
   replace(name: string): string {
@@ -65,10 +80,10 @@ export default class Robot {
   }
 
   public resetName(): void {
-    this.myName = nameRegistry.replace(this.myName);
+    this.myName = nameRegistry.assign();
   }
 
   public static releaseNames(): void {
-    nameRegistry.init();
+    nameRegistry.reset();
   }
 }
