@@ -58,7 +58,8 @@ describe("Sorted List", () => {
       const elements = list.toArray();
       const end = Date.now();
       expect(elements.length).toEqual(benchmark_items);
-      expect(end - start).toBeLessThan(10);
+      expect(end - start).toBeLessThan(16);
+      // expect(end - start).toBeLessThan(100);
     });
   });
 });
@@ -158,13 +159,11 @@ describe("Node", () => {
 
   describe("when nodes contain [a,b,c,d,e]", () => {
     beforeEach(() => {
-      console.log("this one");
       node.root.add("a");
       node.root.add("b");
       node.root.add("c");
       node.root.add("d");
       node.root.add("e");
-      console.log(node.root.toString());
     });
 
     it("should contain (root, left, center, right) nodes", () => {

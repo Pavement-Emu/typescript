@@ -51,17 +51,6 @@ export class Node<T extends Object> {
       return this;
     }
   }
-
-  // /**
-  //  * Push a new element into the parent node
-  //  * @param element
-  //  */
-  // private push(element: T) {
-  //   if(!this.isFull()){
-
-  //   }
-  // }
-
   /**
    * Add an element.
    * If adding an element results in splitting the node, this
@@ -85,13 +74,8 @@ export class Node<T extends Object> {
       this._elements = toSplit.slice(0, median);
       siblingRight._elements = toSplit.slice(median + 1);
 
-      // console.log(
-      //   `new split is [${this._elements}][${medianElement}][${siblingRight._elements}]`
-      // );
-
       if (!this._parent) {
         // create a new parent
-        // console.log("adding new parent");
         this._parent = new Node<T>();
         this._parent._children.push(this);
       }
@@ -100,7 +84,6 @@ export class Node<T extends Object> {
       this._parent.add(medianElement, true);
 
       // set the parent of the new sibling
-      // console.log("adding siblingRight to parent");
       siblingRight._parent = this._parent;
       this._parent._children.push(siblingRight);
     } else {
@@ -134,6 +117,7 @@ export class Node<T extends Object> {
         const left = this.children[0].toArray();
         const centre = this.children[1].toArray();
         const right = this.children[2].toArray();
+        // console.log("left,centre,right");
         return [
           ...left,
           this.elements[0],
@@ -153,6 +137,7 @@ export class SortedList<T> {
   private elements: T[] = [];
 
   private root: Node<T>;
+  private _length: number = 0;
 
   constructor() {
     this.root = new Node();
@@ -160,20 +145,21 @@ export class SortedList<T> {
 
   // readonly length = this.elements.length;
   add(element: T) {
-    this.elements.push(element);
-    this.elements.sort();
+    // this.elements.push(element);
+    // this.elements.sort();
 
-    // this.root.add(element);
-    // this.root = this.root.root;
+    this.root.add(element);
+    this.root = this.root.root;
+    this._length += 1;
   }
 
   get length() {
-    return this.elements.length;
-    // return this.root.length;
+    // return this.elements.length;
+    return this._length;
   }
 
   toArray() {
-    return this.elements;
-    // return this.root.toArray();
+    // return this.elements;
+    return this.root.toArray();
   }
 }
