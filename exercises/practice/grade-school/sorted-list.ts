@@ -134,8 +134,6 @@ export class Node<T extends Object> {
 
 // B-Tree implementation
 export class SortedList<T> {
-  private elements: T[] = [];
-
   private root: Node<T>;
   private _length: number = 0;
 
@@ -143,23 +141,17 @@ export class SortedList<T> {
     this.root = new Node();
   }
 
-  // readonly length = this.elements.length;
   add(element: T) {
-    // this.elements.push(element);
-    // this.elements.sort();
-
     this.root.add(element);
     this.root = this.root.root;
     this._length += 1;
   }
 
   get length() {
-    // return this.elements.length;
     return this._length;
   }
 
   toArray() {
-    // return this.elements;
     return this.root.toArray();
   }
 }
