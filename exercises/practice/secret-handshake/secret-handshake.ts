@@ -3,7 +3,7 @@ export default class Handshake {
   constructor(private code: number) {
     const commandBits = ["wink", "double blink", "close your eyes", "jump"];
 
-    this._commands = commandBits.filter((_: string, idx: number) => {
+    this._commands = commandBits.filter((_, idx: number) => {
       const base2 = 2 ** idx;
       const isThisCommandBitSet = (code & base2) === base2;
       return isThisCommandBitSet;
