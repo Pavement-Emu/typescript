@@ -20,14 +20,12 @@ function recursiveSearch(n: number, arr: number[]): number {
   }
 
   if (n < arr[middleIdx]) {
-    return recursiveSearch(n, arr.slice(0, middleIdx));
+    const left = arr.slice(0, middleIdx);
+    return recursiveSearch(n, left);
   } else {
-    const foundIdx = recursiveSearch(n, arr.slice(middleIdx));
-    if (foundIdx === notFound) {
-      return notFound;
-    } else {
-      return middleIdx + foundIdx;
-    }
+    const right = arr.slice(middleIdx);
+    const foundIdx = recursiveSearch(n, right);
+    return foundIdx === notFound ? notFound : middleIdx + foundIdx;
   }
 }
 
