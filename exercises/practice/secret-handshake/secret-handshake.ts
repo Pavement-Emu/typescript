@@ -3,9 +3,11 @@ export default class Handshake {
   constructor(private code: number) {
     const commandBits = ["wink", "double blink", "close your eyes", "jump"];
 
-    this._commands = commandBits.filter(
-      (_: string, idx: number) => (code & (2 ** idx)) === 2 ** idx
-    );
+    this._commands = commandBits.filter((_: string, idx: number) => {
+      const base2 = 2 ** idx;
+      const isThisCommandBitSet = (code & base2) === base2;
+      return isThisCommandBitSet;
+    });
     if ((code & 16) === 16) {
       this._commands = this._commands.reverse();
     }
