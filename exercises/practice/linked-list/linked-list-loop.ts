@@ -1,40 +1,17 @@
-// export interface List<X> {
-//   push: (val: X) => void;
-//   unshift: (val: X) => void;
-//   pop: () => X | undefined;
-//   shift: () => X | undefined;
-//   delete: (val: X) => void;
-//   count: () => number;
-// }
 import { List } from "./List";
 
 class Node<X> {
-  constructor(private val: X, public next?: Node<X>) {}
+  constructor(private val: X, public prev?: Node<X>, public next?: Node<X>) {}
 
   push(val: X) {
-    if (this.next) {
-      this.next.push(val);
-    } else {
-      this.next = new Node(val);
-    }
+    this.next = new Node(val, this);
+    return this.next;
   }
 
   pop(): X {
-    if (this.next) {
-      if (this.next.isLast) {
-        const lastValue = this.next.val;
-        delete this.next;
-        return lastValue;
-      } else {
-        return this.next.pop();
-      }
-    } else {
-      return this.val;
-    }
-  }
-
-  deleteNext() {
+    const value = this.next!.value;
     delete this.next;
+    return value;
   }
 
   get hasNext() {
@@ -44,26 +21,41 @@ class Node<X> {
   get value() {
     return this.val;
   }
-
-  get isLast(): boolean {
-    return !this.next;
-  }
 }
 
 export default class LinkedList<X> implements List<X> {
   head?: Node<X>;
-  length: number = 0;
+  tail?: Node<X>;
+
+  private last() {
+    return this.tail;
+  }
+
+  private penultimate() {
+    return this.tail?.prev;
+  }
+
+  private isEmpty() {
+    return this.count() === 0;
+  }
 
   push(val: X) {
-    if (this.head) {
-      this.head.push(val);
-    } else {
+    if (this.isEmpty()) {
       this.head = new Node(val);
+      this.tail = this.head;
+    } else {
+      this.tail = this.tail?.push(val);
     }
   }
 
   unshift(val: X) {
-    this.head = new Node(val, this.head);
+    const oldHead = this.head;
+    this.head = new Node(val, undefined, oldHead);
+    if (this.count() === 1) {
+      this.tail = this.head;
+    } else {
+      oldHead!.prev = this.head;
+    }
   }
 
   shift() {
@@ -72,18 +64,26 @@ export default class LinkedList<X> implements List<X> {
     return val;
   }
 
+  popHead(): X {
+    const val: X = this.head!.value;
+    delete this.head;
+    delete this.tail;
+    return val;
+  }
+
   pop() {
-    if (this.head?.isLast) {
-      const val = this.head.value;
-      delete this.head;
-      return val;
-    } else {
-      return this.head?.pop();
+    if (this.count() === 1) {
+      return this.popHead();
     }
+
+    var penultimate = this.penultimate();
+    this.tail = penultimate;
+    return penultimate?.pop();
   }
 
   delete(value: X) {
     var last: Node<X>, current;
+
     current = this.head;
     while (current && current?.value !== value) {
       last = current;

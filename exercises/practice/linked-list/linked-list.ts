@@ -7,15 +7,28 @@
 //   count: () => number;
 // }
 import { List } from "./List";
-
+interface NodeProperties<X> {
+  val: X;
+  prev?: Node<X>;
+  next?: Node<X>;
+}
 class Node<X> {
-  constructor(private val: X, public next?: Node<X>) {}
+  val: X;
+  prev?: Node<X>;
+  next?: Node<X>;
+  constructor(properties: NodeProperties<X>) {
+    this.val = properties.val;
+    this.prev = properties.prev;
+    this.next = properties.next;
+  }
 
   push(val: X) {
     if (this.next) {
       this.next.push(val);
     } else {
-      this.next = new Node(val);
+      this.next = new Node({
+        val
+      });
     }
   }
 
@@ -52,18 +65,19 @@ class Node<X> {
 
 export default class LinkedList<X> implements List<X> {
   head?: Node<X>;
+  tail?: Node<X>;
   length: number = 0;
 
   push(val: X) {
     if (this.head) {
       this.head.push(val);
     } else {
-      this.head = new Node(val);
+      this.head = new Node({ val });
     }
   }
 
   unshift(val: X) {
-    this.head = new Node(val, this.head);
+    this.head = new Node({ val, next: this.head });
   }
 
   shift() {

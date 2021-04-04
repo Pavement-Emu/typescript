@@ -1,4 +1,5 @@
 import LinkedList from "./linked-list";
+import LinkedListLoop from "./linked-list-loop";
 import { List } from "./List";
 
 type ListConstructor<X> = () => List<X>;
@@ -106,3 +107,4 @@ const suite = (type: string, ctor: ListConstructor<number>) => {
 };
 
 suite("LinkedList", () => new LinkedList<number>());
+suite("LinkedList-Loop", () => new LinkedListLoop<number>());
