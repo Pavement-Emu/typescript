@@ -78,6 +78,11 @@ export default class Rational {
     }
   }
 
+  reduce() {
+    // already performed in constructor
+    return this;
+  }
+
   add(other: Rational): Rational {
     const n1 = this.numerator * other.denominator;
     const n2 = other.numerator * this.denominator;

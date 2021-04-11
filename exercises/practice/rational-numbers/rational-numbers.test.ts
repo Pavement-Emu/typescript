@@ -165,32 +165,32 @@ describe("Exponentiation of a real number to a rational number", () => {
 });
 
 describe("Reduction to lowest terms", () => {
-  xit("Reduce a positive rational number to lowest terms", () => {
+  it("Reduce a positive rational number to lowest terms", () => {
     const expected = new Rational(1, 2);
     expect(new Rational(2, 4).reduce()).toEqual(expected);
   });
 
-  xit("Reduce a negative rational number to lowest terms", () => {
+  it("Reduce a negative rational number to lowest terms", () => {
     const expected = new Rational(-2, 3);
     expect(new Rational(-4, 6).reduce()).toEqual(expected);
   });
 
-  xit("Reduce a rational number with a negative denominator to lowest terms", () => {
+  it("Reduce a rational number with a negative denominator to lowest terms", () => {
     const expected = new Rational(-1, 3);
     expect(new Rational(3, -9).reduce()).toEqual(expected);
   });
 
-  xit("Reduce zero to lowest terms", () => {
+  it("Reduce zero to lowest terms", () => {
     const expected = new Rational(0, 1);
     expect(new Rational(0, 6).reduce()).toEqual(expected);
   });
 
-  xit("Reduce an integer to lowest terms", () => {
+  it("Reduce an integer to lowest terms", () => {
     const expected = new Rational(-2, 1);
     expect(new Rational(-14, 7).reduce()).toEqual(expected);
   });
 
-  xit("Reduce one to lowest terms", () => {
+  it("Reduce one to lowest terms", () => {
     const expected = new Rational(1, 1);
     expect(new Rational(13, 13).reduce()).toEqual(expected);
   });
