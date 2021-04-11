@@ -1,4 +1,4 @@
-import Rational from "./rational-numbers";
+import Rational, { sqrt } from "./rational-numbers";
 
 describe("Addition", () => {
   it("Add two positive rational numbers", () => {
@@ -193,5 +193,25 @@ describe("Reduction to lowest terms", () => {
   xit("Reduce one to lowest terms", () => {
     const expected = new Rational(1, 1);
     expect(new Rational(13, 13).reduce()).toEqual(expected);
+  });
+});
+
+describe("sqrt", () => {
+  const examples = [
+    [100, 10],
+    [25, 5],
+    [36, 6],
+    [16, 4],
+    [9, 3],
+    [4, 2],
+    [2, 1.414213562373095]
+  ];
+
+  examples.forEach((example) => {
+    const expected = example[1];
+    const input = example[0];
+    it(`should calculate sqrt(${input}) === ${expected}`, () => {
+      expect(sqrt(input)).toEqual(expected);
+    });
   });
 });

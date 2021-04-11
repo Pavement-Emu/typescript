@@ -18,7 +18,7 @@ function greatestCommonDivisor(n1: number, n2: number): number {
  * Iterations limited to 1000
  * @param n The number to calculate the square root of
  */
-function sqrt(n: number) {
+export function sqrt(n: number) {
   // The maximum number of decimals is 17
   //https://www.w3schools.com/js/js_numbers.asp
 
@@ -33,7 +33,7 @@ function sqrt(n: number) {
     iter++;
     if (iter >= maxIter) {
       console.log("Too many iterations!");
-      console.log(`sqrt(${n}) ~ ${mid} ??`);
+      console.log(`sqrt(${n}) ~ ${guess} ??`);
       break;
     }
     if (sq(max) < n) {
