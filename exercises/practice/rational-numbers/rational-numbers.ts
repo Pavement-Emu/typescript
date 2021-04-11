@@ -13,6 +13,52 @@ function greatestCommonDivisor(n1: number, n2: number): number {
   return 1;
 }
 
+/**
+ * Perform a binary search to calculate the square root of a value.
+ * Iterations limited to 1000
+ * @param n The number to calculate the square root of
+ */
+function sqrt(n: number) {
+  // The maximum number of decimals is 17
+  //https://www.w3schools.com/js/js_numbers.asp
+
+  var min = 0;
+  var max = 10;
+  const mid = (min: number, max: number) => (min + max) / 2;
+  const sq = (n: number) => n * n;
+  var guess = mid(min, max);
+  const maxIter = 1000;
+  var iter = 0;
+  for (; sq(guess) !== n; guess = mid(min, max)) {
+    iter++;
+    if (iter >= maxIter) {
+      console.log("Too many iterations!");
+      console.log(`sqrt(${n}) ~ ${mid} ??`);
+      break;
+    }
+    if (sq(max) < n) {
+      // TODO - Possible boundary case if srqt(max) is requested?
+
+      // is max to small?
+      min = max;
+      max *= 2;
+      // go round the loop
+    }
+
+    const midSq = sq(guess);
+    if (midSq < n) {
+      // console.log(`${mid} < sqrt(${n}) < ${max}`);
+      min = guess;
+    } else {
+      // console.log(`${min} < sqrt(${n}) < ${mid}`);
+      // min < sqrt(n) < mid
+      max = guess;
+    }
+  }
+  // console.log(`DEBUG: sqrt(${n}) iterations: ${iter}`);
+  return guess;
+}
+
 export default class Rational {
   constructor(private numerator: number, private denominator: number) {
     this.reduceFactors();
@@ -71,7 +117,8 @@ export default class Rational {
     const a = Math.pow(n, this.numerator);
     // use language optimisation to avoid rounding where possible.
     if (this.denominator === 2) {
-      return Math.sqrt(a);
+      // return Math.sqrt(a);
+      return sqrt(a);
     }
     if (this.denominator === 3) {
       return Math.cbrt(a);
