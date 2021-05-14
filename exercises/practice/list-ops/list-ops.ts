@@ -73,4 +73,35 @@ export default class List<T> implements Iterable<T> {
 
     return new List(mapped);
   }
+
+  foldl<X>(fn: Accumulator<T, X>, start: X) {
+    var acc = start;
+    for (var elem of this._values) {
+      acc = fn(acc, elem);
+    }
+
+    return acc;
+  }
+
+  foldr<X>(fn: Accumulator<T, X>, start: X) {
+    var acc = start;
+    for (var i = this._values.length - 1; i >= 0; i--) {
+      const elem = this._values[i];
+      acc = fn(acc, elem);
+    }
+
+    return acc;
+  }
+
+  reverse() {
+    const reversed = [];
+
+    for (var i = this._values.length - 1; i >= 0; i--) {
+      reversed[reversed.length] = this._values[i];
+    }
+
+    return new List(reversed);
+  }
 }
+
+type Accumulator<T, X> = (acc: X, elem: T) => X;

@@ -78,36 +78,36 @@ describe("returns a list of elements whose values equal the list value transform
 });
 
 describe("folds (reduces) the given list from the left with a function", () => {
-  it.skip("empty list", () => {
+  it("empty list", () => {
     const list1 = new List<number>();
     expect(list1.foldl((acc: number, el: number) => el / acc, 2)).toEqual(2);
   });
 
-  it.skip("division of integers", () => {
+  it("division of integers", () => {
     const list1 = new List([1, 2, 3, 4]);
     expect(list1.foldl((acc: number, el: number) => el / acc, 24)).toEqual(64);
   });
 });
 
 describe("folds (reduces) the given list from the right with a function", () => {
-  it.skip("empty list", () => {
+  it("empty list", () => {
     const list1 = new List<number>();
     expect(list1.foldr((acc: number, el: number) => el / acc, 2)).toEqual(2);
   });
 
-  it.skip("division of integers", () => {
+  it("division of integers", () => {
     const list1 = new List([1, 2, 3, 4]);
     expect(list1.foldr((acc: number, el: number) => el / acc, 24)).toEqual(9);
   });
 });
 
 describe("reverse the elements of a list", () => {
-  it.skip("empty list", () => {
+  it("empty list", () => {
     const list1 = new List();
     expect(list1.reverse().values).toEqual([]);
   });
 
-  it.skip("non-empty list", () => {
+  it("non-empty list", () => {
     const list1 = new List([1, 3, 5, 7]);
     expect(list1.reverse().values).toEqual([7, 5, 3, 1]);
   });
