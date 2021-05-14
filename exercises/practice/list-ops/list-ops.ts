@@ -1,17 +1,5 @@
 type Predicate<T> = (arg: T) => boolean;
 
-class ListIterator<T> implements Iterator<T> {
-  idx: number = 0;
-  constructor(private obj: List<T>) {}
-  next(): IteratorResult<T> {
-    const lastIdx = this.obj.values.length;
-    return {
-      done: this.idx >= lastIdx,
-      value: this.obj.values[this.idx++]
-    };
-  }
-}
-
 function append<T>(arr: T[], val: T) {
   // the same as Array.append
   arr[arr.length] = val;
@@ -21,11 +9,11 @@ function append<T>(arr: T[], val: T) {
 export default class List<T> implements Iterable<T> {
   constructor(private _values: T[] = []) {}
   [Symbol.iterator](): Iterator<T> {
-    return new ListIterator(this);
+    return this.iterate();
   }
 
   append(list: List<T>) {
-    for (var entry of list._values) {
+    for (var entry of list) {
       append(this._values, entry);
     }
     return this;
@@ -45,7 +33,7 @@ export default class List<T> implements Iterable<T> {
   filter(predicate: Predicate<T>) {
     const filtered: T[] = [];
 
-    for (const entry of this._values) {
+    for (const entry of this) {
       if (predicate(entry)) {
         append(filtered, entry);
       }
@@ -56,7 +44,7 @@ export default class List<T> implements Iterable<T> {
 
   length(): number {
     var length = 0;
-    for (const _ of this._values) {
+    for (const _ of this) {
       length++;
     }
     return length;
@@ -66,9 +54,7 @@ export default class List<T> implements Iterable<T> {
     const mapped: R[] = [];
 
     for (var elem of this) {
-      // this is not efficient - compared to direct array access.
-      mapped[mapped.length] = fn(elem);
-      // mapped.append(new List([fn(elem)]));
+      append(mapped, fn(elem));
     }
 
     return new List(mapped);
@@ -76,7 +62,8 @@ export default class List<T> implements Iterable<T> {
 
   foldl<X>(fn: Accumulator<T, X>, start: X) {
     var acc = start;
-    for (var elem of this._values) {
+
+    for (const elem of this) {
       acc = fn(acc, elem);
     }
 
@@ -85,8 +72,8 @@ export default class List<T> implements Iterable<T> {
 
   foldr<X>(fn: Accumulator<T, X>, start: X) {
     var acc = start;
-    for (var i = this._values.length - 1; i >= 0; i--) {
-      const elem = this._values[i];
+
+    for (const elem of this.iterateReverse()) {
       acc = fn(acc, elem);
     }
 
@@ -94,13 +81,33 @@ export default class List<T> implements Iterable<T> {
   }
 
   reverse() {
-    const reversed = [];
+    const reversed: T[] = [];
 
-    for (var i = this._values.length - 1; i >= 0; i--) {
-      reversed[reversed.length] = this._values[i];
+    for (const elem of this.iterateReverse()) {
+      append(reversed, elem);
     }
 
     return new List(reversed);
+  }
+
+  private iterate() {
+    const that = this;
+    const iterator = function* (idx: number) {
+      while (idx < that._values.length) {
+        yield that._values[idx++];
+      }
+    };
+    return iterator(0);
+  }
+
+  private iterateReverse() {
+    const that = this;
+    const iterator = function* (idx: number) {
+      while (idx >= 0) {
+        yield that._values[idx--];
+      }
+    };
+    return iterator(this._values.length - 1);
   }
 }
 
