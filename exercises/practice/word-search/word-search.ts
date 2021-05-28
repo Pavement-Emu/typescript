@@ -5,7 +5,10 @@ type Found = {
 type Grid = string[];
 
 export default class WordSearch {
-  constructor(private grid: Grid) {}
+  private verticalGrid: Grid;
+  constructor(private grid: Grid) {
+    this.verticalGrid = this.transposeGridToColumns();
+  }
   public find(words: string[]): Found {
     const join = (a: any, b: any) => {
       return { ...a, ...b };
@@ -16,8 +19,40 @@ export default class WordSearch {
 
   private matches(word: string) {
     return {
-      [word]: this.leftToRight(word) || this.rightToLeft(word)
+      [word]:
+        this.leftToRight(word) ||
+        this.rightToLeft(word) ||
+        this.topToBottom(word)
     };
+  }
+
+  private transposeGridToColumns(): Grid {
+    const totalColumns = this.grid[0].length;
+    const transposedGrid: Grid = [];
+    for (var i = 0; i < totalColumns; i++) {
+      var column: string[] = [];
+      for (const row of this.grid) {
+        column.push(row.charAt(i));
+      }
+      transposedGrid.push(column.join(""));
+    }
+    return transposedGrid;
+  }
+
+  private topToBottom(word: string) {
+    const columns = this.verticalGrid;
+    var colNum = 0;
+    for (const line of columns) {
+      colNum++;
+      for (var lineNum = 0; lineNum + word.length <= line.length; lineNum++) {
+        if (line.substr(lineNum).startsWith(word)) {
+          return {
+            start: [lineNum + 1, colNum],
+            end: [lineNum + word.length, colNum]
+          };
+        }
+      }
+    }
   }
 
   private leftToRight(word: string) {

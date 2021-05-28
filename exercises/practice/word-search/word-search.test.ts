@@ -255,7 +255,7 @@ describe("different directions", () => {
 });
 
 describe("vertical directions", () => {
-  test.skip("should locate words written top to bottom", () => {
+  test("should locate words written top to bottom", () => {
     const grid = [
       "jefblpepre",
       "camdcimgtc",
